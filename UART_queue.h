@@ -3,8 +3,8 @@
 
 #include <ctl.h>
 //define size for RX and TX buffers
-#define UART_RX_SIZE   (8)
-#define UART_TX_SIZE   (1024)
+#define UART_RX_SIZE   (150)
+#define UART_TX_SIZE   (150)
 
   //TX buffer type
   struct UART_Tx{
