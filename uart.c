@@ -7,27 +7,15 @@
 extern struct UART_Tx UART_NAME(TxBuf);
 extern struct UART_Rx UART_NAME(RxBuf);
 
-#ifdef USE_UCA0
-  static void enable_ints(void){
-    //enable interrupts
-    IE2|=UCA0TXIE|UCA0RXIE;
-  }
+static void enable_ints(void){
+  //enable interrupts
+  UART_REG(IFG)|=UCTXIE|UCRXIE;
+}
 
-  static void disable_ints(void){
-    //disable interrupts
-    IE2&=~(UCA0TXIE|UCA0RXIE);
-  }
-#else
-  static void enable_ints(void){
-    //enable interrupts
-    UC1IE|=UCA1TXIE|UCA1RXIE;
-  }
-  
-  static void disable_ints(void){
-    //disable interrupts
-    UC1IE&=~(UCA1TXIE|UCA1RXIE);
-  }
-#endif
+static void disable_ints(void){
+  //disable interrupts
+  UART_REG(IFG)&=~(UCTXIE|UCRXIE);
+}
 
 void UART_NAME(init_UART) (void){
  //init queues
@@ -35,24 +23,22 @@ void UART_NAME(init_UART) (void){
   ctl_byte_queue_init(&UART_NAME(RxBuf).queue,UART_NAME(RxBuf).buf,UART_RX_SIZE);
   UART_NAME(TxBuf).done=0;
    //setup UART operation
-  UART_REG(CTL1)=UCSWRST;
-  UART_REG(CTL0)=0;
-  UART_REG(CTL1)|=UCSSEL_1;
+  UART_REG(CTLW0)=UCSWRST;
+  UART_REG(CTLW0)|=UCSSEL_1;
   
   //set baud rate to 9600
-  UART_REG(BR0)=3;
-  UART_REG(BR1)=0;
-  UART_REG(MCTL)=UCBRS_3;
+  UART_REG(BRW)=3;
+  UART_REG(MCTLW)=(0x92<<8);
 
   #ifdef USE_UCA0
     //setup pins
-    P3SEL|=BIT4|BIT5;
+    P3SEL0|=BIT4|BIT5;
   #else
     //setup pins
-    P3SEL|=BIT6|BIT7;
+    P3SEL0|=BIT6|BIT7;
   #endif
   //take UCA1 out of reset mode
-  UART_REG(CTL1)&=~UCSWRST;
+  UART_REG(CTLW0)&=~UCSWRST;
   //enable UART interrupts
   enable_ints();
 }
@@ -68,13 +54,14 @@ void UART_NAME(BR9600) (void){
   //set baud rate to 9600
   UART_REG(BR0)=3;
   UART_REG(BR1)=0;
-  UART_REG(MCTL)=UCBRS_3;
+  UART_REG(MCTLW)=0x92;
   //take UCA1 out of reset mode
   UART_REG(CTL1)&=~UCSWRST;
   //enable UART interrupts
   enable_ints();
 }
 
+/* disable high baud rate functions until system clock is chosen
 void UART_NAME(BR38400) (void){
   //enable UART interrupts
   disable_ints();
@@ -86,7 +73,7 @@ void UART_NAME(BR38400) (void){
   //set baud rate to 38400
   UART_REG(BR0)=26;
   UART_REG(BR1)=0;
-  UART_REG(MCTL)=UCBRF_1|UCOS16;
+  UART_REG(MCTLW)=UCBRF_1|UCOS16;
   //take UCA1 out of reset mode
   UART_REG(CTL1)&=~UCSWRST;
   //enable UART interrupts
@@ -104,12 +91,12 @@ void UART_NAME(BR57600) (void){
   //set baud rate to 57600
   UART_REG(BR0)=17;
   UART_REG(BR1)=0;
-  UART_REG(MCTL)=UCBRF_6|UCBRS_0|UCOS16;
+  UART_REG(MCTLW)=UCBRF_6|UCBRS_0|UCOS16;
   //take UCA1 out of reset mode
   UART_REG(CTL1)&=~UCSWRST;
   //enable UART interrupts
   enable_ints();
-}
+}*/
 
 //queue byte to get transmitted
 int UART_NAME(TxChar) (unsigned char c){
