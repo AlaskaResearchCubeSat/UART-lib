@@ -17,8 +17,9 @@ static void disable_ints(void){
   UART_REG(IFG)&=~(UCTXIE|UCRXIE);
 }
 
-void UART_NAME(init_UART) (void){
- //init queues
+void UART_NAME(init_UART) (unsigned int port,unsigned int tx,unsigned int rx){
+  volatile unsigned char *port_sel,*base_map;
+  //init queues
   ctl_byte_queue_init(&UART_NAME(TxBuf).queue,UART_NAME(TxBuf).buf,UART_TX_SIZE);
   ctl_byte_queue_init(&UART_NAME(RxBuf).queue,UART_NAME(RxBuf).buf,UART_RX_SIZE);
   UART_NAME(TxBuf).done=0;
@@ -30,13 +31,45 @@ void UART_NAME(init_UART) (void){
   UART_REG(BRW)=3;
   UART_REG(MCTLW)=(0x92<<8);
 
-  #ifdef USE_UCA0
-    //setup pins
-    P3SEL0|=BIT4|BIT5;
-  #else
-    //setup pins
-    P3SEL0|=BIT6|BIT7;
-  #endif
+  //check port and pins for validity
+  if((port>=2 && port<=4) && ((tx<8) || (rx<8)) ){
+    switch(port){
+      case 2:
+        port_sel=&P2SEL0;
+        base_map=&P2MAP0;
+      break;
+      case 3:
+        port_sel=&P4SEL0;
+        base_map=&P4MAP0;
+      break;
+      case 4:
+        port_sel=&P4SEL0;
+        base_map=&P4MAP0;
+      break;
+    }
+    //unlock port maping
+    PMAPKEYID=PMAPKEY;
+    //allow reconfiguration
+    PMAPCTL|=PMAPRECFG;
+    //check if tx pin is valid
+    if(tx<8){
+      //setup port mapping for tx pin
+      base_map[tx]=PM_UART_TXD;
+      //select pin special function
+      *port_sel|=1<<tx;
+    }
+    //check if rx pin is valid
+    if(rx<8){
+      //setup port mapping for rx pin
+      base_map[rx]=PM_UART_RXD;
+      //select pin special function
+      *port_sel|=1<<rx;
+    }
+    //lock port maping
+    PMAPKEYID=0;
+  }
+    
+
   //take UCA1 out of reset mode
   UART_REG(CTLW0)&=~UCSWRST;
   //enable UART interrupts
