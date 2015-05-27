@@ -13,7 +13,7 @@
   //get character from port without blocking
   int UCA0_CheckKey(void);
   //check if UART is transmitting or receiving
-  #define UCA0_CheckBusy()  (UCA0STAT&UCBUSY)
+  #define UCA0_CheckBusy()  (UCA0STATW&UCBUSY)
 
   //baud rate functions
   void UCA0_BR9600(void);
