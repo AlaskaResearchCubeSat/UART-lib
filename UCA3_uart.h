@@ -9,7 +9,7 @@
   //Get a byte from the receive queue
   int UCA3_Getc(void);
   //initialize UCA0 for UART Usage
-  void UCA3_init_UART(void);
+  void UCA3_init_UART(unsigned int port,unsigned int tx,unsigned int rx);
   //get character from port without blocking
   int UCA3_CheckKey(void);
   //check if UART is transmitting or receiving

@@ -2,6 +2,11 @@
 #include <stdio.h>
 #include "uart.h"
 
+//include all header files here to make sure prorotypes match
+#include "UCA0_uart.h"
+#include "UCA1_uart.h"
+#include "UCA2_uart.h"
+#include "UCA3_uart.h"
 
 //buffer structures
 extern struct UART_Tx UART_NAME(TxBuf);
