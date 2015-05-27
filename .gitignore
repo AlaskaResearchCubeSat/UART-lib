@@ -3,11 +3,11 @@
 *.hzs
 
 #build directories
-UCA0 Debug/
-UCA0 Release/
-UCA1 Debug/
-UCA1 Release/
-UCA2 Debug/
-UCA2 Release/
-UCA3 Debug/
-UCA3 Release/
+UART UCA0 Debug/
+UART UCA0 Release/
+UART UCA1 Debug/
+UART UCA1 Release/
+UART UCA2 Debug/
+UART UCA2 Release/
+UART UCA3 Debug/
+UART UCA3 Release/
