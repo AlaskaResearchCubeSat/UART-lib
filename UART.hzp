@@ -39,8 +39,6 @@
     build_use_hardware_multiplier="32-Bit Multiplier"
     c_preprocessor_definitions="CTL_TASKING"
     c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(PackagesDir)/libraries/libctl/include/"
-    linker_memory_map_file="$(PackagesDir)/targets/msp430/MSP430F6779A.xml"
-    linker_section_placement_file="$(StudioDir)/targets/section_placement_info_abcd_iv64.xml"
     msp430_debug_interface="JTAG"
     msp430_identify_string="MSP430F6779A"
     msp430_insn_set="MSP430X" />
