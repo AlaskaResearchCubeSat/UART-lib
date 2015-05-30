@@ -56,3 +56,4 @@ for file in ("UCA0_uart.h","UCA1_uart.h","UART_queue.h"):
     print("Copying "+inpath+" to "+outpath)
     shutil.copyfile(inpath,outpath)
 
+print("Export Completed Successfully!");
