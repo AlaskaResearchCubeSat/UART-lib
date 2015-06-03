@@ -14,12 +14,12 @@ extern struct UART_Rx UART_NAME(RxBuf);
 
 static void enable_ints(void){
   //enable interrupts
-  UART_REG(IFG)|=UCTXIE|UCRXIE;
+  UART_REG(IE)|=UCTXIE|UCRXIE;
 }
 
 static void disable_ints(void){
   //disable interrupts
-  UART_REG(IFG)&=~(UCTXIE|UCRXIE);
+  UART_REG(IE)&=~(UCTXIE|UCRXIE);
 }
 
 void UART_NAME(init_UART) (unsigned int port,unsigned int tx,unsigned int rx){
