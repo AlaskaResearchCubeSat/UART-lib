@@ -44,8 +44,8 @@ void UART_NAME(init_UART) (unsigned int port,unsigned int tx,unsigned int rx){
         base_map=&P2MAP0;
       break;
       case 3:
-        port_sel=&P4SEL0;
-        base_map=&P4MAP0;
+        port_sel=&P3SEL0;
+        base_map=&P3MAP0;
       break;
       case 4:
         port_sel=&P4SEL0;
