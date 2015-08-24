@@ -85,35 +85,37 @@ void UART_NAME(BR9600) (void){
   //enable UART interrupts
   disable_ints();
   //put module into reset mode
-  UART_REG(CTL1)|=UCSWRST;
+  UART_REG(CTLW0)|=UCSWRST;
   //set clock source
-  UART_REG(CTL1)&=~(UCSSEL0|UCSSEL1);
-  UART_REG(CTL1)|=UCSSEL_1;
+  UART_REG(CTLW0)&=~(UCSSEL0|UCSSEL1);
+  UART_REG(CTLW0)|=UCSSEL_1;
   //set baud rate to 9600
-  UART_REG(BR0)=3;
-  UART_REG(BR1)=0;
-  UART_REG(MCTLW)=0x92;
+  UART_REG(BRW)=3;
+  //set modulation
+  UART_REG(MCTLW_H)=0x92;   //UCBRS
+  UART_REG(MCTLW_L)=0;
   //take UCA1 out of reset mode
-  UART_REG(CTL1)&=~UCSWRST;
+  UART_REG(CTLW0)&=~UCSWRST;
   //enable UART interrupts
   enable_ints();
 }
 
-/* disable high baud rate functions until system clock is chosen
+
 void UART_NAME(BR38400) (void){
   //enable UART interrupts
   disable_ints();
   //put module into reset mode
-  UART_REG(CTL1)|=UCSWRST;
+  UART_REG(CTLW0)|=UCSWRST;
   //set clock source
-  UART_REG(CTL1)&=~(UCSSEL0|UCSSEL1);
-  UART_REG(CTL1)|=UCSSEL_2;
+  UART_REG(CTLW0)&=~(UCSSEL0|UCSSEL1);
+  UART_REG(CTLW0)|=UCSSEL_2;
   //set baud rate to 38400
-  UART_REG(BR0)=26;
-  UART_REG(BR1)=0;
-  UART_REG(MCTLW)=UCBRF_1|UCOS16;
+  UART_REG(BRW)=32;
+  //set modulation
+  UART_REG(MCTLW_H)=0xEE;     //UCBRS
+  UART_REG(MCTLW_L)=UCBRF_11|UCOS16_L;
   //take UCA1 out of reset mode
-  UART_REG(CTL1)&=~UCSWRST;
+  UART_REG(CTLW0)&=~UCSWRST;
   //enable UART interrupts
   enable_ints();
 }
@@ -122,19 +124,20 @@ void UART_NAME(BR57600) (void){
   //enable UART interrupts
   disable_ints();
   //put module into reset mode
-  UART_REG(CTL1)|=UCSWRST;
+  UART_REG(CTLW0)|=UCSWRST;
   //set clock source
-  UART_REG(CTL1)&=~(UCSSEL0|UCSSEL1);
-  UART_REG(CTL1)|=UCSSEL_2;
+  UART_REG(CTLW0)&=~(UCSSEL0|UCSSEL1);
+  UART_REG(CTLW0)|=UCSSEL_2;
   //set baud rate to 57600
-  UART_REG(BR0)=17;
-  UART_REG(BR1)=0;
-  UART_REG(MCTLW)=UCBRF_6|UCBRS_0|UCOS16;
+  UART_REG(BRW)=21;
+  //set modulation
+  UART_REG(MCTLW_H)=0x22;     //UCBRS
+  UART_REG(MCTLW_L)=UCBRF_8|UCOS16_L;
   //take UCA1 out of reset mode
-  UART_REG(CTL1)&=~UCSWRST;
+  UART_REG(CTLW0)&=~UCSWRST;
   //enable UART interrupts
   enable_ints();
-}*/
+}
 
 //queue byte to get transmitted
 int UART_NAME(TxChar) (unsigned char c){
