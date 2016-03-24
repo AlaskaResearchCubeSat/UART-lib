@@ -50,7 +50,7 @@ for config in ("UCA0 Release","UCA0 Debug","UCA1 Release","UCA1 Debug","UCA2 Rel
 	print("Copying "+inpath+" to "+outpath)
 	shutil.copyfile(inpath,outpath)
 
-for file in ("UCA0_uart.h","UCA1_uart.h","UART_queue.h"):
+for file in ("UCA0_uart.h","UCA1_uart.h","UCA2_uart.h","UCA3_uart.h","UART_queue.h"):
     outpath=os.path.join(include,file)
     inpath=os.path.join(inputDir,file)
     print("Copying "+inpath+" to "+outpath)
